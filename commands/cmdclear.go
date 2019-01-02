@@ -101,7 +101,7 @@ func (c *CmdClear) Exec(args *CommandArgs) error {
 
 	msg, err := util.SendEmbed(args.Session, args.Channel.ID,
 		fmt.Sprintf("Deleted %d message%s.", len(msgs), multipleMsgs), "", util.ColorEmbedUpdated)
-	util.DeleteMessageLater(args.Session, msg, 6*time.Second)
+	util.DeleteMessageLater(args.Session, msg, 3*time.Second)
 
 	return err
 }

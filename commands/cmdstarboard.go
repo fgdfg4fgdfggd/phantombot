@@ -69,9 +69,12 @@ func (c *CmdStarboard) setup(args *CommandArgs) error {
 	}
 
 	finish := func(mc *util.MessageCollector) {
-		fmt.Println(starboard)
+		err := args.CmdHandler.db.SetStarboard(starboard)
+		if err != nil {
+			util.SendEmbedError(args.Session, args.Channel.ID,
+				"Failed setting up starboard: ```\n"+err.Error()+"\n```")
+		}
 		time.Sleep(5 * time.Second)
-		args.Session.ChannelMessagesBulkDelete(args.Channel.ID, msgIDs)
 		mc.Close("end")
 	}
 
@@ -101,7 +104,7 @@ func (c *CmdStarboard) setup(args *CommandArgs) error {
 		if msg.Content == "exit" {
 			currState = -1
 			mAb, hErr := util.SendEmbedError(args.Session, args.Channel.ID, "Aborted.")
-			if hErr != nil {
+			if hErr == nil {
 				msgIDs = append(msgIDs, mAb.ID)
 			}
 		}
@@ -118,7 +121,7 @@ func (c *CmdStarboard) setup(args *CommandArgs) error {
 				if hErr != nil {
 					errMsg, hErr := util.SendEmbedError(args.Session, msg.ChannelID,
 						"Could not find anny text channel passing this resolvable. Please enter again.")
-					if hErr != nil {
+					if hErr == nil {
 						msgIDs = append(msgIDs, errMsg.ID)
 					}
 					return
@@ -137,8 +140,7 @@ func (c *CmdStarboard) setup(args *CommandArgs) error {
 			if hErr != nil {
 				errMsg, hErr := util.SendEmbedError(args.Session, msg.ChannelID,
 					"Invalid number. Please enter again.")
-				if hErr != nil {
-
+				if hErr == nil {
 					msgIDs = append(msgIDs, errMsg.ID)
 				}
 				return
@@ -146,13 +148,19 @@ func (c *CmdStarboard) setup(args *CommandArgs) error {
 			if numb < 1 {
 				errMsg, hErr := util.SendEmbedError(args.Session, msg.ChannelID,
 					"Number must be larger than 1. Please enter again.")
-				if hErr != nil {
+				if hErr == nil {
 					msgIDs = append(msgIDs, errMsg.ID)
 				}
 				return
 			}
 			starboard.Minimum = numb
 			currState++
+			m, hErr := util.SendEmbed(args.Session, args.Channel.ID,
+				fmt.Sprintf("Starboard successfully set up in channel <#%s> with a minimum of %d :star: reactions.", starboard.ChannelID, starboard.Minimum),
+				"", util.ColorEmbedUpdated)
+			if hErr == nil {
+				msgIDs = append(msgIDs, m.ID)
+			}
 			finish(mc)
 
 		default:
@@ -161,7 +169,7 @@ func (c *CmdStarboard) setup(args *CommandArgs) error {
 	})
 
 	mc.OnClosed(func(reason string, c *util.MessageCollector) {
-		fmt.Println(reason, len(c.CollectedMessages), len(c.CollectedMatches))
+		args.Session.ChannelMessagesBulkDelete(args.Channel.ID, msgIDs)
 	})
 
 	return nil

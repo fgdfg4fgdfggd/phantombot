@@ -39,5 +39,12 @@ func (l *ListenerReady) Handler(s *discordgo.Session, e *discordgo.Ready) {
 		if err := s.GuildMemberNickname(g.ID, "@me", util.AutoNick); err != nil {
 			util.Log.Errorf("Failed updating nickname on guild %s (%s): %s", g.Name, g.ID, err)
 		}
+
+		starboard, err := l.db.GetStarboard(g.ID)
+		if err != nil && !core.IsErrDatabaseNotFound(err) {
+			util.Log.Error("Failed getting starboard from DB: ", err)
+		} else if err == nil {
+			util.SetupStarboards = append(util.SetupStarboards, starboard)
+		}
 	}
 }

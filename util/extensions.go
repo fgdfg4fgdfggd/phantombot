@@ -116,6 +116,8 @@ func FetchChannel(s *discordgo.Session, guildID, resolvable string, condition ..
 	if err != nil {
 		return nil, err
 	}
+	rx := regexp.MustCompile("<#|>")
+	resolvable = rx.ReplaceAllString(resolvable, "")
 
 	checkFuncs := []func(*discordgo.Channel, string) bool{
 		func(r *discordgo.Channel, resolvable string) bool {

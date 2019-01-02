@@ -32,6 +32,9 @@ type Database interface {
 
 	GetSetting(setting string) (string, error)
 	SetSetting(setting, value string) error
+
+	SetStarboard(starboard *util.Starboard) error
+	GetStarboard(guildID string) (*util.Starboard, error)
 }
 
 func IsErrDatabaseNotFound(err error) bool {

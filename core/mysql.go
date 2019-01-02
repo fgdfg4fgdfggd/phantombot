@@ -188,3 +188,35 @@ func (m *MySql) GetReportsGuild(guildID string) ([]*util.Report, error) {
 	}
 	return results, nil
 }
+
+func (m *MySql) SetStarboard(sb *util.Starboard) error {
+	res, err := m.DB.Exec("UPDATE starboard SET chanID = ?, enabled = ?, minimum = ? WHERE guildID = ?",
+		sb.ChannelID, sb.Enabled, sb.Minimum, sb.GuildID)
+	if err != nil {
+		return err
+	}
+	if ar, err := res.RowsAffected(); ar == 0 {
+		if err != nil {
+			return err
+		}
+		_, err := m.DB.Exec("INSERT INTO starboard (guildID, chanID, enabled, minimum) VALUES (?, ?, ?, ?)",
+			sb.GuildID, sb.ChannelID, sb.Enabled, sb.Minimum)
+		if err != nil {
+			return err
+		}
+	} else if err != nil {
+		return err
+	}
+	return err
+}
+
+func (m *MySql) GetStarboard(guildID string) (*util.Starboard, error) {
+	sb := &util.Starboard{
+		GuildID: guildID,
+	}
+	err := m.DB.QueryRow("SELECT chanID, enabled, minimum FROM starboard WHERE guildID = ?", guildID).Scan(&sb.ChannelID, &sb.Enabled, &sb.Minimum)
+	if err == sql.ErrNoRows {
+		err = ErrDatabaseNotFound
+	}
+	return sb, err
+}

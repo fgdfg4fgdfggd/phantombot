@@ -35,3 +35,7 @@ func (c *CmdHandler) GetCommand(invoke string) (Command, bool) {
 	cmd, ok := c.registeredCmds[invoke]
 	return cmd, ok
 }
+
+func (c *CmdHandler) GetNCmdInstances() int {
+	return len(c.registeredCmdInstances)
+}

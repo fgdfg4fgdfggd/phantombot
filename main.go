@@ -98,6 +98,7 @@ func main() {
 	cmdHandler.RegisterCommand(new(commands.CmdKick))
 	cmdHandler.RegisterCommand(new(commands.CmdBan))
 	cmdHandler.RegisterCommand(new(commands.CmdStarboard))
+	util.Log.Infof("Registered %d commands", cmdHandler.GetNCmdInstances())
 
 	//////////////////////////
 	// BOT SESSION CREATION //

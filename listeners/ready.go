@@ -24,6 +24,7 @@ func (l *ListenerReady) Handler(s *discordgo.Session, e *discordgo.Ready) {
 		e.User.Username, e.User.Discriminator, e.User.ID, len(e.Guilds))
 	util.Log.Infof("Invite link: https://discordapp.com/api/oauth2/authorize?client_id=%s&scope=bot&permissions=%d",
 		e.User.ID, util.InvitePermission)
+	util.Log.Infof("Running on %d servers", len(s.State.Guilds))
 
 	s.UpdateStatus(0, util.StdMotd)
 
@@ -47,4 +48,5 @@ func (l *ListenerReady) Handler(s *discordgo.Session, e *discordgo.Ready) {
 			util.SetupStarboards = append(util.SetupStarboards, starboard)
 		}
 	}
+	util.Log.Infof("Set up %d starboards", len(util.SetupStarboards))
 }

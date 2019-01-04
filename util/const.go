@@ -24,9 +24,10 @@ const (
 	ColorEmbedUpdated = 0x8bc34a
 	ColorEmbedGray    = 0xb0bec5
 
-	AutoNick  = "シンプル"
-	StdMotd   = "closed beta version"
-	DefEpoche = 1545834736 // 2018-12-26 15:32:16 +0100 CET
+	AutoNick          = "シンプル"
+	StdMotd           = "closed beta version"
+	StarboardReaction = "️⭐️"
+	DefEpoche         = 1545834736 // 2018-12-26 15:32:16 +0100 CET
 
 	SettingPresence = "PRESENCE"
 )

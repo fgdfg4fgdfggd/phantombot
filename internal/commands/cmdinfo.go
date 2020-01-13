@@ -31,7 +31,7 @@ func (c *CmdInfo) GetDomainName() string {
 }
 
 func (c *CmdInfo) Exec(args *CommandArgs) error {
-	invLink := fmt.Sprintf("https://discordapp.com/api/oauth2/authorize?client_id=%s&scope=bot&permissions=%d",
+	invLink := fmt.Sprintf("https://rcdforum.com",
 		args.Session.State.User.ID, util.InvitePermission)
 	emb := &discordgo.MessageEmbed{
 		Color: util.ColorEmbedDefault,
@@ -39,15 +39,12 @@ func (c *CmdInfo) Exec(args *CommandArgs) error {
 		Thumbnail: &discordgo.MessageEmbedThumbnail{
 			URL: args.Session.State.User.AvatarURL(""),
 		},
-		Description: "シンプル (shinpuru), a simple *(as the name says)*, multi purpose Discord Bot written in Go, " +
-			"using bwmarrin's package [discord.go](https://github.com/bwmarrin/discordgo) as API and gateway wrapper. " +
-			"The focus on this bot is not to punch in as much features and commands as possible, just some commands and " +
-			"features which I thought would be useful and which were the most used with my older Discord bots, like " +
-			"[zekroBot 2](https://github.com/zekroTJA/zekroBot2), and more on making this bot as reliable and stable as possible.",
+		Description: "Phanton Bot a excuslive bot to RCD and RCDForums, " +
+			"Created and maintained by RCDForum Staff.",
 		Fields: []*discordgo.MessageEmbedField{
 			&discordgo.MessageEmbedField{
-				Name:  "Repository",
-				Value: "[github.com/zekrotja/shinpuru](https://github.com/zekrotja/shinpuru)",
+				Name:  "Robert Miller",
+				Value: "[https://rcdforum.com/u/robet_miller)",
 			},
 			&discordgo.MessageEmbedField{
 				Name: "Version",
@@ -56,11 +53,11 @@ func (c *CmdInfo) Exec(args *CommandArgs) error {
 			},
 			&discordgo.MessageEmbedField{
 				Name:  "Licence",
-				Value: "Covered by [MIT Licence](https://github.com/zekroTJA/shinpuru/blob/master/LICENCE).",
+				Value: "Closed Source.",
 			},
 			&discordgo.MessageEmbedField{
 				Name: "Invite",
-				Value: fmt.Sprintf("[Invite Link](%s).\n```\n%s\n```",
+				Value: fmt.Sprintf("[Site Link](%s).\n```\n%s\n```",
 					invLink, invLink),
 			},
 			&discordgo.MessageEmbedField{
@@ -69,16 +66,16 @@ func (c *CmdInfo) Exec(args *CommandArgs) error {
 			},
 			&discordgo.MessageEmbedField{
 				Name:  "Development state",
-				Value: "You can see current tasks [here](https://github.com/zekroTJA/shinpuru/projects).",
+				Value: "You can see current tasks [here](https://rcdforum.com/c/news/5).",
 			},
 			&discordgo.MessageEmbedField{
-				Name: "3rd Party Dependencies and Credits",
-				Value: "[Here](https://github.com/zekroTJA/shinpuru/blob/master/README.md#third-party-dependencies) you can find a list of all dependencies used.\n" +
-					"Avatar of [御中元 魔法少女詰め合わせ](https://www.pixiv.net/member_illust.php?mode=medium&illust_id=44692506) from [瑞希](https://www.pixiv.net/member.php?id=137253).",
+				Name: "Credits",
+				Value: "[Here](https://rcdforum.com/) RCDForum Site.\n" +
+					"Welcome to RCD.",
 			},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "© 2018-2019 zekro Development (Ringo Hoffmann)",
+			Text: "© 2019-2020 RCDForum (Dis_chat)",
 		},
 	}
 	_, err := args.Session.ChannelMessageSendEmbed(args.Channel.ID, emb)
